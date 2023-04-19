@@ -1,0 +1,22 @@
+﻿@model System.Collections.Generic.List<string>
+
+@{
+    ViewBag.Title = "Message Mgmt";
+    Layout = "_Layout";
+}
+
+<h2>Publish Message Management</h2>
+
+<p>Send Message</p>
+<form asp-controller="PublishMessage" asp-action="Send" method="post">
+    @Html.TextBox("message")
+    <button type="submit">Send</button>
+</form>
+
+<h3>Subscribed Users</h3>
+<ul>
+    @foreach (var user in Model)
+    {
+        <li>@user</li>
+    }
+</ul>

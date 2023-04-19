@@ -1,0 +1,27 @@
+﻿@model User.Web.Controllers.LineNotifySettingModel
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Line Notify Setting</h2>
+
+
+<p>Hi @Model.Name</p>
+<p>
+    You are@(Model.IsSubscribe
+               ? string.Empty
+               : " not") subscribed.
+</p>
+@if (Model.NeedNewAccessToken)
+{
+    <p>Please allow our system to send message to you.</p>
+    <button onclick="document.location.href='@Model.RequestUserTokenUrl'">Allow</button>
+}
+else
+{
+    <form asp-controller="LineNotify" asp-action="ToggleSubscribe" method="post">
+    <button>Click to @(Model.IsSubscribe ? "un" : string.Empty)subscribe</button>
+    </form>
+}
