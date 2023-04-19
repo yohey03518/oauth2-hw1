@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using User.Web.Models;
+using User.Web.Models.DomainModels;
 using User.Web.Repositories;
 
 namespace User.Web.Controllers;

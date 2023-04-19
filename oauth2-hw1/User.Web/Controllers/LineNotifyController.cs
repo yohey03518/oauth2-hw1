@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using User.Web.Extensions;
 using User.Web.Models;
+using User.Web.Models.ViewModels;
 using User.Web.Proxies;
 using User.Web.Repositories;
 

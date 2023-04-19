@@ -1,4 +1,5 @@
 using User.Web.Models;
+using User.Web.Models.DomainModels;
 
 namespace User.Web.Repositories;
 

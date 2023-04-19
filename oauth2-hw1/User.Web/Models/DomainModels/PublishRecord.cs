@@ -1,4 +1,4 @@
-﻿namespace User.Web.Models;
+﻿namespace User.Web.Models.DomainModels;
 
 public class PublishRecord
 {
