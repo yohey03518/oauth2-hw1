@@ -7,6 +7,8 @@ public class ApplicationUser
     public string Email { get; set; }
     public bool IsSubscribed { get; set; }
     public string LineNotifyAccessToken { get; set; }
+    public string LineLoginIdToken { get; set; }
+    public string LineLoginAccessToken { get; set; }
 
     public bool HasLineNotifyToken()
     {

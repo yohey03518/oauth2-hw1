@@ -1,4 +1,4 @@
-﻿@model System.Collections.Generic.List<string>
+﻿@model User.Web.Models.PublishMessageIndexModel
 
 @{
     ViewBag.Title = "Message Mgmt";
@@ -15,8 +15,40 @@
 
 <h3>Subscribed Users</h3>
 <ul>
-    @foreach (var user in Model)
+    @foreach (var user in Model.SubscribedUsers)
     {
         <li>@user</li>
     }
 </ul>
+
+<p>@ViewBag.SendResultMessage</p>
+
+<h2>History Records</h2>
+<table>
+    <tr>
+        <th>Time</th>
+        <th>Message</th>
+        <th>Success Users</th>
+        <th>Fail User with Response Message</th>
+    </tr>
+    @foreach (var modelPublishRecord in Model.PublishRecords)
+    {
+        <tr>
+            <td>@modelPublishRecord.PublishTime.ToString("yyyy/MM/dd HH:mm:ss")</td>
+            <td>@modelPublishRecord.Message</td>
+            <td>@string.Join(",", modelPublishRecord.SuccessUser)</td>
+            <td>
+                @foreach (var valueTuple in modelPublishRecord.FailUserReason)
+                {
+                    <p>@valueTuple.Item1 @valueTuple.Item2</p>
+                }
+            </td>
+        </tr>
+    }
+</table>
+
+<style>
+    table,tr,th,td {
+        border: 1px solid black;
+    }
+</style>

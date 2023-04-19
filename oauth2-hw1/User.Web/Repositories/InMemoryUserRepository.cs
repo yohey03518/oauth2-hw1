@@ -29,4 +29,20 @@ public class InMemoryUserRepository : IApplicationUserRepository
     {
         return Users.Where(x => x.IsSubscribed).ToList();
     }
+
+    public void Register(ApplicationUser user)
+    {
+        var existUser = Users.FirstOrDefault(x => x.LineId == user.LineId);
+        if (existUser == null)
+        {
+            Users.Add(user);
+        }
+        else
+        {
+            existUser.Name = user.Name;
+            existUser.Email = user.Email;
+            existUser.LineLoginIdToken = user.LineLoginIdToken;
+            existUser.LineLoginAccessToken = user.LineLoginAccessToken;
+        }
+    }
 }

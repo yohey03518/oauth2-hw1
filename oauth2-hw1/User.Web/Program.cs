@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.CookiePolicy;
 using User.Web.Controllers;
 using User.Web.Middlewares;
+using User.Web.Proxies;
 using User.Web.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,7 +12,9 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<OnlineUserManager>();
 builder.Services.AddMemoryCache();
 builder.Services.AddTransient<LineNotifyProxy>();
+builder.Services.AddTransient<LineLoginProxy>();
 builder.Services.AddTransient<IApplicationUserRepository, InMemoryUserRepository>();
+builder.Services.AddTransient<IPublishRecordRepository, InMemoryPublishRecordRepository>();
 
 var app = builder.Build();
 
@@ -23,7 +26,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();

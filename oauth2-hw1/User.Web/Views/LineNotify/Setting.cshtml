@@ -1,4 +1,4 @@
-﻿@model User.Web.Controllers.LineNotifySettingModel
+﻿@model User.Web.Models.LineNotifySettingModel
 
 @{
     ViewBag.Title = "title";
@@ -22,6 +22,6 @@
 else
 {
     <form asp-controller="LineNotify" asp-action="ToggleSubscribe" method="post">
-    <button>Click to @(Model.IsSubscribe ? "un" : string.Empty)subscribe</button>
+    <button>Click to @(Model.IsSubscribe ? "un" : string.Empty)subscribe Line Notification</button>
     </form>
 }

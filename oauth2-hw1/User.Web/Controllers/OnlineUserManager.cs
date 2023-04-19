@@ -6,8 +6,8 @@ namespace User.Web.Controllers;
 
 public class OnlineUserManager
 {
-    private readonly IMemoryCache memoryCache;
     private readonly IApplicationUserRepository _applicationUserRepository;
+    private readonly IMemoryCache memoryCache;
 
     public OnlineUserManager(IMemoryCache memoryCache, IApplicationUserRepository applicationUserRepository)
     {
@@ -39,14 +39,30 @@ public class OnlineUserManager
 
     public bool TryGetUser(out ApplicationUser user)
     {
-        var token = HttpRequest.Cookies["token"];
+        var token = GetLoginToken();
         user = null!;
-        string lineId = string.Empty;
+        var lineId = string.Empty;
         var tryGetValue = !string.IsNullOrWhiteSpace(token) && memoryCache.TryGetValue(token, out lineId!);
+
         if (tryGetValue)
         {
             user = _applicationUserRepository.GetByLineId(lineId);
         }
+
         return tryGetValue;
+    }
+
+    public void LogOut()
+    {
+        if (TryGetUser(out _))
+        {
+            memoryCache.Remove(GetLoginToken()!);
+        }
+    }
+
+    private string? GetLoginToken()
+    {
+        var token = HttpRequest.Cookies["token"];
+        return token;
     }
 }

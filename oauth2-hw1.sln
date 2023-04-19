@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.Web", oauth2-hw1\"User.Web\User.Web.csproj", "{DDBE93D5-CBBD-4A2D-9B9D-C653ADFA30DA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "User.Web", "oauth2-hw1\User.Web\User.Web.csproj", "{DDBE93D5-CBBD-4A2D-9B9D-C653ADFA30DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

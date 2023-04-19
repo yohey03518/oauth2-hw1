@@ -1,30 +1,22 @@
-﻿using System.Net.Http.Headers;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using User.Web.Extensions;
 using User.Web.Models;
+using User.Web.Proxies;
 using User.Web.Repositories;
 
 namespace User.Web.Controllers;
 
 public class LineNotifyController : Controller
 {
-    private readonly HttpClient _httpClient;
+    private readonly IApplicationUserRepository _applicationUserRepository;
+    private readonly LineNotifyProxy _lineNotifyProxy;
     private readonly OnlineUserManager _onlineUserManager;
-    private IApplicationUserRepository _applicationUserRepository;
-    private LineNotifyProxy _lineNotifyProxy;
 
-    public LineNotifyController(HttpClient httpClient, OnlineUserManager onlineUserManager, IApplicationUserRepository applicationUserRepository, LineNotifyProxy lineNotifyProxy)
+    public LineNotifyController(OnlineUserManager onlineUserManager, IApplicationUserRepository applicationUserRepository, LineNotifyProxy lineNotifyProxy)
     {
-        _httpClient = httpClient;
         _onlineUserManager = onlineUserManager;
         _applicationUserRepository = applicationUserRepository;
         _lineNotifyProxy = lineNotifyProxy;
-    }
-
-    [HttpGet]
-    [HttpPost]
-    public IActionResult Login()
-    {
-        return Redirect(_lineNotifyProxy.GetLoginUrl());
     }
 
     public async Task<IActionResult> Setting()
@@ -36,7 +28,7 @@ public class LineNotifyController : Controller
                 IsSubscribe = user.IsSubscribed,
                 NeedNewAccessToken = !user.HasLineNotifyToken() || !await _lineNotifyProxy.IsValidLineNotifyToken(user.LineNotifyAccessToken),
                 Name = user.Name,
-                RequestUserTokenUrl = _lineNotifyProxy.RequestUserTokenUrl(),
+                RequestUserTokenUrl = _lineNotifyProxy.RequestUserTokenUrl(Request.GetRequestHostWithScheme()),
             };
 
             return View("Setting", lineNotifySettingModel);
@@ -48,7 +40,7 @@ public class LineNotifyController : Controller
     [HttpGet]
     public async Task<IActionResult> Callback(string code)
     {
-        var userLineNotifyAccessToken = await _lineNotifyProxy.GetAccessToken(code);
+        var userLineNotifyAccessToken = await _lineNotifyProxy.GetAccessToken(code, Request.GetRequestHostWithScheme());
 
         _onlineUserManager.TryGetUser(out var user);
         user.LineNotifyAccessToken = userLineNotifyAccessToken;
@@ -62,15 +54,12 @@ public class LineNotifyController : Controller
     {
         _onlineUserManager.TryGetUser(out var user);
         user.ToggleSubscribe();
+        if (!user.IsSubscribed)
+        {
+            await _lineNotifyProxy.Revoke(user.LineNotifyAccessToken);
+            user.LineNotifyAccessToken = string.Empty;
+        }
         _applicationUserRepository.AddOrUpdate(user);
         return await Setting();
     }
-}
-
-public class LineNotifySettingModel
-{
-    public bool IsSubscribe { get; set; }
-    public string RequestUserTokenUrl { get; set; }
-    public string Name { get; set; }
-    public bool NeedNewAccessToken { get; set; }
 }
