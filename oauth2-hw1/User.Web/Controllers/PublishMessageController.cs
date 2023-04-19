@@ -59,7 +59,7 @@ public class PublishMessageController : Controller
             }
         }
 
-        _publishRecordRepository.Save(new PublishRecord(message, successUser, failUserReason));
+        await _publishRecordRepository.Save(new PublishRecord(message, successUser, failUserReason));
         ViewBag.SendResultMessage = responseMessageBuilder.ToString();
         return Index();
     }

@@ -1,4 +1,3 @@
-using User.Web.Models;
 using User.Web.Models.DomainModels;
 
 namespace User.Web.Repositories;
@@ -6,9 +5,10 @@ namespace User.Web.Repositories;
 public class InMemoryPublishRecordRepository : IPublishRecordRepository
 {
     private static List<PublishRecord> Records = new();
-    public void Save(PublishRecord publishRecord)
+    public Task Save(PublishRecord publishRecord)
     {
         Records.Add(publishRecord);
+        return Task.CompletedTask;
     }
 
     public List<PublishRecord> GetAll()

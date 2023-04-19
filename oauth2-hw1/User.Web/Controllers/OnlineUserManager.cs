@@ -41,7 +41,7 @@ public class OnlineUserManager
     public bool TryGetUser(out ApplicationUser user)
     {
         var token = GetLoginToken();
-        user = null!;
+        user = null;
         var lineId = string.Empty;
         var tryGetValue = !string.IsNullOrWhiteSpace(token) && memoryCache.TryGetValue(token, out lineId!);
 
@@ -50,7 +50,7 @@ public class OnlineUserManager
             user = _applicationUserRepository.GetByLineId(lineId);
         }
 
-        return tryGetValue;
+        return user != null && tryGetValue;
     }
 
     public void LogOut()

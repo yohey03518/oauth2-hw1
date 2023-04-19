@@ -2,6 +2,7 @@
 
 public class PublishRecord
 {
+    public PublishRecord() { }
     public PublishRecord(string message, List<string> successUser, List<(string, string)> failUserReason)
     {
         Message = message;
@@ -10,9 +11,9 @@ public class PublishRecord
         PublishTime = DateTime.Now;
     }
 
-    public string Message { get; }
-    public List<string> SuccessUser { get; }
-    public List<(string, string)> FailUserReason { get; }
+    public string Message { get; set; }
+    public List<string> SuccessUser { get; set; }
+    public List<(string, string)> FailUserReason { get; set; }
 
-    public DateTime PublishTime { get; }
+    public DateTime PublishTime { get; set; }
 }
