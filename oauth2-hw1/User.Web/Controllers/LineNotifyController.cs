@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using User.Web.Extensions;
 using User.Web.Models;
 using User.Web.Models.ViewModels;
 using User.Web.Proxies;
@@ -29,7 +28,7 @@ public class LineNotifyController : Controller
                 IsSubscribe = user.IsSubscribed,
                 NeedNewAccessToken = !user.HasLineNotifyToken() || !await _lineNotifyProxy.IsValidLineNotifyToken(user.LineNotifyAccessToken),
                 Name = user.Name,
-                RequestUserTokenUrl = _lineNotifyProxy.RequestUserTokenUrl(Request.GetRequestHostWithScheme()),
+                RequestUserTokenUrl = _lineNotifyProxy.RequestUserTokenUrl(Request.Host.Value),
             };
 
             return View("Setting", lineNotifySettingModel);
@@ -41,7 +40,7 @@ public class LineNotifyController : Controller
     [HttpGet]
     public async Task<IActionResult> Callback(string code)
     {
-        var userLineNotifyAccessToken = await _lineNotifyProxy.GetAccessToken(code, Request.GetRequestHostWithScheme());
+        var userLineNotifyAccessToken = await _lineNotifyProxy.GetAccessToken(code, Request.Host.Value);
 
         _onlineUserManager.TryGetUser(out var user);
         user.LineNotifyAccessToken = userLineNotifyAccessToken;

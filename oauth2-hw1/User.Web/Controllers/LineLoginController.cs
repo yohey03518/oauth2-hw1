@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using User.Web.Extensions;
 using User.Web.Models;
 using User.Web.Models.DomainModels;
 using User.Web.Proxies;
@@ -29,13 +28,13 @@ public class LineLoginController : Controller
             return RedirectToAction("Setting", "LineNotify");
         }
 
-        return Redirect(_lineLoginProxy.GetLoginUrl(Request.GetRequestHostWithScheme()));
+        return Redirect(_lineLoginProxy.GetLoginUrl(Request.Host.Value));
     }
 
     [HttpGet]
     public async Task<IActionResult> Callback(string code)
     {
-        var lineLoginResponse = await _lineLoginProxy.ProcessCallback(code, Request.GetRequestHostWithScheme());
+        var lineLoginResponse = await _lineLoginProxy.ProcessCallback(code, Request.Host.Value);
 
         var applicationUser = new ApplicationUser
         {

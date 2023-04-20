@@ -7,4 +7,8 @@
         <RootNamespace>User.Web</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Extensions" />
+    </ItemGroup>
+
 </Project>

@@ -9,7 +9,7 @@ public class LineLoginProxy
 {
     private readonly HttpClient _httpClient;
     private const string ClientId = "1660895431";
-    private const string CallbackUrlFormat = "{0}/linelogin/callback";
+    private const string CallbackUrlFormat = "https://{0}/linelogin/callback";
     private const string ClientSecret = "580258b85a161bf8c14ebecc93422405";
 
     public LineLoginProxy(HttpClient httpClient)
@@ -17,18 +17,18 @@ public class LineLoginProxy
         _httpClient = httpClient;
     }
 
-    public string GetLoginUrl(string requestHostWithScheme)
+    public string GetLoginUrl(string requestHost)
     {
-        return $"https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id={ClientId}&state=123123&scope=profile%20openid%20email&redirect_uri={string.Format(CallbackUrlFormat, requestHostWithScheme)}";
+        return $"https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id={ClientId}&state=123123&scope=profile%20openid%20email&redirect_uri={string.Format(CallbackUrlFormat, requestHost)}";
     }
 
-    public async Task<LineLoginResponse> ProcessCallback(string code, string requestHostWithScheme)
+    public async Task<LineLoginResponse> ProcessCallback(string code, string requestHost)
     {
         var httpResponseMessage = await _httpClient.PostAsync("https://api.line.me/oauth2/v2.1/token", new FormUrlEncodedContent(new Dictionary<string, string>()
         {
             { "code", code },
             { "grant_type", "authorization_code" },
-            { "redirect_uri", string.Format(CallbackUrlFormat, requestHostWithScheme) },
+            { "redirect_uri", string.Format(CallbackUrlFormat, requestHost) },
             { "client_id", ClientId },
             { "client_secret", ClientSecret },
             { "id_token_key_type", "JWK" },
