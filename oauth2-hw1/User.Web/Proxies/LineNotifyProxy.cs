@@ -4,9 +4,9 @@ namespace User.Web.Proxies;
 
 public class LineNotifyProxy
 {
-    private const string ClientId = "obKA6oUcwpV0nMgyhKmZKt";
+    private const string ClientId = "";
     private const string CallbackUrlFormat = "https://{0}/linenotify/callback";
-    private const string ClientSecret = "YkvNpsYHLUxs8Ql5JRVtcFWIfbxJ4YJPsSVMdQTisQf";
+    private const string ClientSecret = "";
     private readonly HttpClient _httpClient;
 
     public LineNotifyProxy(HttpClient httpClient)
@@ -16,15 +16,19 @@ public class LineNotifyProxy
 
     public string RequestUserTokenUrl(string requestHost)
     {
-        return $"https://notify-bot.line.me/oauth/authorize?response_type=code&client_id={ClientId}&state=123123&scope=notify&redirect_uri={string.Format(CallbackUrlFormat, requestHost)}";
+        const string responseType = "";
+        const string scope = "";
+        return $"https://notify-bot.line.me/oauth/authorize?response_type={responseType}&client_id={ClientId}&state=123123&scope={scope}&redirect_uri={string.Format(CallbackUrlFormat, requestHost)}";
     }
 
     public async Task<string> GetAccessToken(string code, string requestHost)
     {
+        const string grantType = "";
+
         var httpResponseMessage = await _httpClient.PostAsync("https://notify-bot.line.me/oauth/token", new FormUrlEncodedContent(new Dictionary<string, string>()
         {
             { "code", code },
-            { "grant_type", "authorization_code" },
+            { "grant_type", grantType },
             { "redirect_uri", string.Format(CallbackUrlFormat, requestHost) },
             { "client_id", ClientId },
             { "client_secret", ClientSecret },
